@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LaporFasilitas · Pelaporan Kerusakan Fasilitas Publik</title>
+    <meta
+      name="description"
+      content="Membantu warga melaporkan kerusakan fasilitas umum, melacak status laporan, dan melihat progres perbaikan untuk mendukung layanan publik yang lebih baik."
+    />
+    <meta name="theme-color" content="#0B1F3A" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2312305A'/%3E%3Cpath d='M16 6c-4.4 0-8 3.4-8 7.7C8 19.5 16 26 16 26s8-6.5 8-12.3C24 9.4 20.4 6 16 6Z' fill='%23fff'/%3E%3Cpath d='m12.6 14 2.4 2.4 4.4-4.6' fill='none' stroke='%2312305A' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    />
+    <!-- Font (opsional): bila offline, tampilan memakai font sistem sebagai cadangan. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- =========================================================
+         ICON SPRITE (SVG inline, tanpa library eksternal)
+         Pemakaian: <svg class="icon"><use href="#i-nama"></use></svg>
+         ========================================================= -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none" aria-hidden="true">
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="M9 22V12h6v10" /></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></symbol>
+      <symbol id="i-dashboard" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5" /><rect x="14" y="3" width="7" height="5" rx="1.5" /><rect x="14" y="12" width="7" height="9" rx="1.5" /><rect x="3" y="16" width="7" height="5" rx="1.5" /></symbol>
+      <symbol id="i-file-plus" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M12 18v-6M9 15h6" /></symbol>
+      <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01" /></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></symbol>
+      <symbol id="i-log-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" /></symbol>
+      <symbol id="i-log-in" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" /></symbol>
+      <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M19 8v6M22 11h-6" /></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></symbol>
+      <symbol id="i-tag" viewBox="0 0 24 24"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.41 0l8.59-8.59a1 1 0 0 0 0-1.41Z" /><path d="M7 7h.01" /></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z" /><circle cx="12" cy="13" r="3" /></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" /></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" /></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+      <symbol id="i-check-circle" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="M22 4 12 14.01l-3-3" /></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" /></symbol>
+      <symbol id="i-alert-triangle" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><path d="M12 9v4M12 17h.01" /></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
+      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" /></symbol>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7" /></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></symbol>
+      <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24M10.73 5.08A10.4 10.4 0 0 1 12 5c7 0 10 7 10 7a13.2 13.2 0 0 1-1.67 2.68M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.39-1.61M2 2l20 20" /></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" /></symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 5L2 7" /></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" /></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="m9 12 2 2 4-4" /></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></symbol>
+      <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21" /></symbol>
+      <symbol id="i-road" viewBox="0 0 24 24"><path d="M4 21 8.5 3M20 21 15.5 3M12 4v2.5M12 10.5v3M12 17.5V20" /></symbol>
+      <symbol id="i-lamp" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5M9 18h6M10 22h4" /></symbol>
+      <symbol id="i-building" viewBox="0 0 24 24"><path d="M3 22h18M6 18v-7M10 18v-7M14 18v-7M18 18v-7M12 2l8 5H4z" /></symbol>
+      <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" /></symbol>
+      <symbol id="i-tree" viewBox="0 0 24 24"><path d="M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0ZM7 16v6M13 19v3M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5" /></symbol>
+      <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z" /></symbol>
+      <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9z" /></symbol>
+      <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4ZM22 2 11 13" /></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></symbol>
+      <symbol id="i-crosshair" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M22 12h-4M6 12H2M12 6V2M12 22v-4" /></symbol>
+      <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></symbol>
+      <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" /></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" /></symbol>
+      <symbol id="i-maximize" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3" /></symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 10 5-10 5L2 7z" /><path d="m2 17 10 5 10-5M2 12l10 5 10-5" /></symbol>
+      <symbol id="i-hand" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-4 0v0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8" /><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" /></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+      <symbol id="i-filter" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54z" /></symbol>
+      <symbol id="i-logo" viewBox="0 0 24 24"><path d="M12 2.5c-4 0-7.25 3.1-7.25 7 0 5.25 7.25 12 7.25 12s7.25-6.75 7.25-12c0-3.9-3.25-7-7.25-7Z" fill="currentColor" stroke="none" /><path d="m9 9.8 2.1 2.1 4-4.1" stroke="var(--logo-check, #fff)" stroke-width="2.2" /></symbol>
+    </svg>
+
+    <a class="skip-link" href="#konten-utama" data-skip>Lewati ke konten utama</a>
+
+    <!-- =========================================================
+         LAYOUT PUBLIK (Landing Page)
+         ========================================================= -->
+    <div id="public-shell" class="public-shell" hidden>
+      <header class="site-header" data-site-header>
+        <div class="container site-header__inner">
+          <a class="brand" href="#/" aria-label="LaporFasilitas, ke beranda">
+            <span class="brand__mark"><svg class="icon"><use href="#i-logo"></use></svg></span>
+            <span class="brand__name">Lapor<span>Fasilitas</span></span>
+          </a>
+          <button
+            class="icon-btn site-header__toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="site-nav"
+            aria-label="Buka menu navigasi"
+            data-action="toggle-site-nav"
+          >
+            <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
+          </button>
+          <nav id="site-nav" class="site-nav" aria-label="Navigasi utama">
+            <ul class="site-nav__links">
+              <li><a href="#beranda" data-scroll>Beranda</a></li>
+              <li><a href="#tentang" data-scroll>Tentang</a></li>
+              <li><a href="#cara-kerja" data-scroll>Cara Kerja</a></li>
+              <li><a href="#statistik" data-scroll>Statistik</a></li>
+            </ul>
+            <div class="site-nav__actions" data-slot="guest-actions">
+              <a class="btn btn--ghost-light" href="#/masuk">
+                <svg class="icon" aria-hidden="true"><use href="#i-log-in"></use></svg>Masuk
+              </a>
+              <a class="btn btn--accent" href="#/daftar">Daftar</a>
+            </div>
+            <div class="site-nav__actions" data-slot="member-actions" hidden>
+              <a class="btn btn--accent" href="#/dashboard">
+                <svg class="icon" aria-hidden="true"><use href="#i-dashboard"></use></svg>Ke Dashboard
+              </a>
+            </div>
+          </nav>
+        </div>
+      </header>
+      <main id="public-view" class="public-view" tabindex="-1"></main>
+    </div>
+
+    <!-- =========================================================
+         LAYOUT AUTENTIKASI (Masuk & Daftar)
+         ========================================================= -->
+    <div id="auth-shell" class="auth-shell" hidden>
+      <main id="auth-view" tabindex="-1"></main>
+    </div>
+
+    <!-- =========================================================
+         LAYOUT APLIKASI (Setelah Masuk)
+         ========================================================= -->
+    <div id="app-shell" class="app-shell" hidden>
+      <aside id="sidebar" class="sidebar" aria-label="Menu aplikasi">
+        <div class="sidebar__head">
+          <a class="brand brand--sidebar" href="#/dashboard" aria-label="LaporFasilitas, ke dashboard">
+            <span class="brand__mark"><svg class="icon"><use href="#i-logo"></use></svg></span>
+            <span class="brand__name sidebar__label">Lapor<span>Fasilitas</span></span>
+          </a>
+          <button
+            class="icon-btn icon-btn--ghost sidebar__pin"
+            type="button"
+            aria-controls="sidebar"
+            aria-expanded="false"
+            aria-label="Sematkan menu samping"
+            data-action="toggle-sidebar"
+          >
+            <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
+          </button>
+          <button class="icon-btn icon-btn--ghost sidebar__close" type="button" aria-label="Tutup menu" data-action="close-drawer">
+            <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+          </button>
+        </div>
+        <nav class="sidebar__nav" aria-label="Navigasi aplikasi">
+          <p class="sidebar__section sidebar__label">Menu</p>
+          <ul>
+            <li><a class="nav-item" href="#/dashboard" data-nav="dashboard" title="Dashboard"><svg class="icon" aria-hidden="true"><use href="#i-dashboard"></use></svg><span class="sidebar__label">Dashboard</span></a></li>
+            <li><a class="nav-item" href="#/buat-laporan" data-nav="buat-laporan" title="Buat Pelaporan"><svg class="icon" aria-hidden="true"><use href="#i-file-plus"></use></svg><span class="sidebar__label">Buat Pelaporan</span></a></li>
+            <li><a class="nav-item" href="#/status" data-nav="status" title="Status Laporan"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"></use></svg><span class="sidebar__label">Status Laporan</span></a></li>
+            <li><a class="nav-item" href="#/panduan" data-nav="panduan" title="Panduan Pelaporan / Tentang"><svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg><span class="sidebar__label">Panduan &amp; Tentang</span></a></li>
+          </ul>
+          <p class="sidebar__section sidebar__label">Akun</p>
+          <ul>
+            <li><a class="nav-item" href="#/profil" data-nav="profil" title="Profil Akun"><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg><span class="sidebar__label">Profil Akun</span></a></li>
+            <li><button class="nav-item nav-item--danger" type="button" data-action="logout" title="Logout"><svg class="icon" aria-hidden="true"><use href="#i-log-out"></use></svg><span class="sidebar__label">Logout</span></button></li>
+          </ul>
+        </nav>
+        <div class="sidebar__foot sidebar__label">
+          <svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>
+          <span>Mode demonstrasi: data bersifat contoh.</span>
+        </div>
+      </aside>
+      <div class="sidebar-backdrop" data-action="close-drawer" hidden></div>
+
+      <div class="app-main" id="app-main">
+        <header class="app-header">
+          <button
+            class="icon-btn app-header__menu"
+            type="button"
+            aria-controls="sidebar"
+            aria-expanded="false"
+            aria-label="Buka menu"
+            data-action="open-drawer"
+          >
+            <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
+          </button>
+          <p class="app-header__title" data-slot="header-title">Dashboard</p>
+          <div class="app-header__actions">
+            <a class="btn btn--primary btn--sm app-header__cta" href="#/buat-laporan" aria-label="Buat Laporan">
+              <svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg><span>Buat Laporan</span>
+            </a>
+            <a class="user-chip" href="#/profil" aria-label="Profil akun">
+              <span class="avatar avatar--sm" data-slot="header-avatar"></span>
+              <span class="user-chip__name" data-slot="header-name"></span>
+            </a>
+          </div>
+        </header>
+        <main id="app-view" class="app-view" tabindex="-1"></main>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         DIALOG & NOTIFIKASI
+         ========================================================= -->
+    <dialog id="report-dialog" class="dialog dialog--wide" aria-labelledby="report-dialog-title">
+      <div class="dialog__inner" data-slot="report-dialog-body"></div>
+    </dialog>
+
+    <dialog id="confirm-dialog" class="dialog dialog--sm" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+      <form method="dialog" class="dialog__inner confirm">
+        <span class="confirm__icon"><svg class="icon" aria-hidden="true"><use href="#i-log-out"></use></svg></span>
+        <h2 id="confirm-title" class="confirm__title">Keluar dari akun?</h2>
+        <p id="confirm-message" class="confirm__text">Anda perlu masuk kembali untuk membuat dan memantau laporan.</p>
+        <div class="confirm__actions">
+          <button class="btn btn--secondary" value="cancel" type="submit">Batal</button>
+          <button class="btn btn--danger" value="confirm" type="submit" data-slot="confirm-ok">Ya, Keluar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="profile-dialog" class="dialog dialog--md" aria-labelledby="profile-dialog-title">
+      <form class="dialog__inner" id="profile-form" novalidate>
+        <div class="dialog__head">
+          <div>
+            <h2 id="profile-dialog-title" class="dialog__title">Edit Profil</h2>
+            <p class="dialog__sub">Perbarui informasi akun Anda.</p>
+          </div>
+          <button class="icon-btn icon-btn--ghost" type="button" aria-label="Tutup" data-action="close-dialog">
+            <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+          </button>
+        </div>
+        <div class="form-stack">
+          <div class="field" data-field="fullName">
+            <label class="field__label" for="pf-name">Nama Lengkap <span class="req" aria-hidden="true">*</span></label>
+            <input class="input" id="pf-name" name="fullName" type="text" autocomplete="name" aria-describedby="pf-name-error" />
+            <p class="field__error" id="pf-name-error" hidden></p>
+          </div>
+          <div class="field" data-field="email">
+            <label class="field__label" for="pf-email">Email</label>
+            <input class="input" id="pf-email" name="email" type="email" readonly aria-describedby="pf-email-hint" />
+            <p class="field__hint" id="pf-email-hint">Email tidak dapat diubah pada mode demo.</p>
+          </div>
+          <div class="form-grid-2">
+            <div class="field" data-field="phone">
+              <label class="field__label" for="pf-phone">No. HP</label>
+              <input class="input" id="pf-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0812xxxxxxxx" aria-describedby="pf-phone-error" />
+              <p class="field__error" id="pf-phone-error" hidden></p>
+            </div>
+            <div class="field" data-field="city">
+              <label class="field__label" for="pf-city">Kota / Kabupaten</label>
+              <input class="input" id="pf-city" name="city" type="text" autocomplete="address-level2" />
+            </div>
+          </div>
+        </div>
+        <div class="dialog__actions">
+          <button class="btn btn--secondary" type="button" data-action="close-dialog">Batal</button>
+          <button class="btn btn--primary" type="submit"><span class="btn__label">Simpan Perubahan</span></button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="toast-region" class="toast-region" role="status" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- =========================================================
+         TEMPLATE HALAMAN
+         Konten statis ditulis di sini; script.js hanya mengisi data.
+         ========================================================= -->
+
+    <!-- ===== Halaman 1: Landing ===== -->
+    <template id="tpl-landing">
+      <section id="beranda" class="hero">
+        <img
+          class="hero__bg"
+          src="https://images.unsplash.com/photo-1679239108020-aca50acd5f00?auto=format&fit=crop&w=2000&q=75"
+          alt="Pemandangan kota modern dengan gedung-gedung tinggi dan jalan raya"
+          fetchpriority="high"
+          data-fallback="hide"
+        />
+        <div class="hero__overlay" aria-hidden="true"></div>
+        <div class="container hero__inner">
+          <div class="hero__content">
+            <p class="eyebrow eyebrow--light"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>Platform Pelaporan Fasilitas Publik</p>
+            <h1 class="hero__title" tabindex="-1">Bersama Wujudkan Fasilitas Publik yang <span>Lebih Baik</span></h1>
+            <p class="hero__lead">
+              Laporkan jalan berlubang, lampu jalan padam, saluran tersumbat, dan kerusakan fasilitas umum lainnya
+              lengkap dengan foto dan lokasi. Pantau penanganannya secara terbuka hingga tuntas.
+            </p>
+            <div class="hero__actions">
+              <a class="btn btn--accent btn--lg" href="#/daftar">Daftar Sekarang<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+              <a class="btn btn--outline-light btn--lg" href="#/masuk"><svg class="icon" aria-hidden="true"><use href="#i-log-in"></use></svg>Login</a>
+            </div>
+            <ul class="hero__trust">
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>Gratis untuk semua warga</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>Status dapat dipantau publik</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>Dilengkapi foto &amp; lokasi</li>
+            </ul>
+          </div>
+          <aside class="hero-card" aria-label="Contoh laporan terbaru" data-slot="hero-card"></aside>
+        </div>
+      </section>
+
+      <section id="tentang" class="section">
+        <div class="container about">
+          <div class="about__media">
+            <img
+              src="https://images.unsplash.com/photo-1595734939818-f4e0d44957df?auto=format&fit=crop&w=1100&q=70"
+              alt="Alat berat sedang memperbaiki permukaan jalan"
+              loading="lazy"
+              data-fallback
+            />
+            <div class="about__float">
+              <span class="about__float-icon"><svg class="icon" aria-hidden="true"><use href="#i-users"></use></svg></span>
+              <p><strong>Suara warga</strong> membantu petugas memprioritaskan perbaikan yang paling dibutuhkan.</p>
+            </div>
+          </div>
+          <div class="about__content">
+            <p class="eyebrow">Tentang Platform</p>
+            <h2 class="section-title">Saluran warga untuk fasilitas publik yang lebih layak</h2>
+            <p class="section-lead">
+              LaporFasilitas menghubungkan warga dengan pengelola fasilitas publik. Setiap laporan tercatat, dapat dilihat
+              publik, dan statusnya diperbarui hingga perbaikan selesai, sehingga prosesnya transparan dan dapat dipertanggungjawabkan.
+            </p>
+            <div class="benefit-grid">
+              <div class="benefit"><span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-eye"></use></svg></span><h3>Transparan</h3><p>Semua laporan dan progresnya terbuka untuk publik.</p></div>
+              <div class="benefit"><span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg></span><h3>Tindak lanjut cepat</h3><p>Laporan langsung diteruskan ke dinas terkait.</p></div>
+              <div class="benefit"><span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg></span><h3>Berbasis lokasi</h3><p>Lokasi akurat memudahkan petugas menemukan titik kerusakan.</p></div>
+              <div class="benefit"><span class="benefit__icon"><svg class="icon" aria-hidden="true"><use href="#i-users"></use></svg></span><h3>Partisipasi warga</h3><p>Setiap laporan ikut membangun kota yang lebih baik.</p></div>
+            </div>
+            <div class="contribute">
+              <h3 class="contribute__title">Bagaimana Anda dapat berkontribusi</h3>
+              <ul class="check-list">
+                <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>Laporkan kerusakan fasilitas umum yang Anda temui.</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>Sertakan foto yang jelas dan alamat yang akurat.</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>Pantau progres dan bagikan informasi kepada warga lain.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="cara-kerja" class="section section--muted">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Cara Kerja</p>
+            <h2 class="section-title">Tiga langkah sederhana menuju perbaikan</h2>
+            <p class="section-lead">Tidak perlu datang ke kantor. Laporan dapat dikirim dari mana saja, kapan saja.</p>
+          </div>
+          <ol class="steps">
+            <li class="step">
+              <span class="step__num" aria-hidden="true">1</span>
+              <span class="step__icon"><svg class="icon" aria-hidden="true"><use href="#i-file-plus"></use></svg></span>
+              <h3>Kirim Laporan</h3>
+              <p>Isi formulir singkat, unggah foto kerusakan, dan tentukan lokasinya. Hanya butuh sekitar dua menit.</p>
+            </li>
+            <li class="step">
+              <span class="step__num" aria-hidden="true">2</span>
+              <span class="step__icon step__icon--orange"><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg></span>
+              <h3>Pantau Progres</h3>
+              <p>Petugas memverifikasi laporan dan meneruskannya ke dinas terkait. Statusnya dapat Anda pantau kapan saja.</p>
+            </li>
+            <li class="step">
+              <span class="step__num" aria-hidden="true">3</span>
+              <span class="step__icon step__icon--green"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"></use></svg></span>
+              <h3>Masalah Terselesaikan</h3>
+              <p>Setelah perbaikan rampung, status berubah menjadi Selesai dan hasilnya dapat dilihat seluruh warga.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="statistik" class="section stats-band" aria-labelledby="stat-title">
+        <div class="container">
+          <div class="section-head section-head--light">
+            <p class="eyebrow eyebrow--light">Data Terbuka</p>
+            <h2 id="stat-title" class="section-title">Statistik Laporan Publik</h2>
+            <p class="section-lead">Ringkasan seluruh laporan yang telah dikirim warga melalui LaporFasilitas.</p>
+          </div>
+          <div class="public-stats">
+            <div class="public-stat">
+              <span class="public-stat__icon"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"></use></svg></span>
+              <strong class="public-stat__value" data-stat="total">0</strong>
+              <span class="public-stat__label">Total Laporan</span>
+            </div>
+            <div class="public-stat public-stat--orange">
+              <span class="public-stat__icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg></span>
+              <strong class="public-stat__value" data-stat="belumSelesai">0</strong>
+              <span class="public-stat__label">Sedang Ditangani</span>
+            </div>
+            <div class="public-stat public-stat--green">
+              <span class="public-stat__icon"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"></use></svg></span>
+              <strong class="public-stat__value" data-stat="selesai">0</strong>
+              <span class="public-stat__label">Laporan Selesai</span>
+            </div>
+          </div>
+          <p class="stats-band__note">*Data contoh untuk keperluan demonstrasi prototipe.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="cta-card">
+            <div>
+              <h2 class="cta-card__title">Siap melaporkan kerusakan di sekitar Anda?</h2>
+              <p class="cta-card__text">Buat akun gratis untuk mengirim laporan dan memantau perkembangannya dari dashboard pribadi.</p>
+            </div>
+            <div class="cta-card__actions">
+              <a class="btn btn--accent btn--lg" href="#/daftar">Daftar Sekarang</a>
+              <a class="btn btn--outline-light btn--lg" href="#/masuk">Login</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <div class="container site-footer__grid">
+          <div class="site-footer__brand">
+            <a class="brand brand--light" href="#/" aria-label="LaporFasilitas, ke beranda">
+              <span class="brand__mark"><svg class="icon"><use href="#i-logo"></use></svg></span>
+              <span class="brand__name">Lapor<span>Fasilitas</span></span>
+            </a>
+            <p>Platform pelaporan kerusakan fasilitas publik yang transparan, mudah digunakan, dan terbuka bagi seluruh warga.</p>
+          </div>
+          <nav aria-label="Navigasi footer">
+            <h2 class="site-footer__title">Navigasi</h2>
+            <ul class="site-footer__links">
+              <li><a href="#beranda" data-scroll>Beranda</a></li>
+              <li><a href="#tentang" data-scroll>Tentang</a></li>
+              <li><a href="#cara-kerja" data-scroll>Cara Kerja</a></li>
+              <li><a href="#/masuk">Login</a></li>
+              <li><a href="#/daftar">Daftar</a></li>
+            </ul>
+          </nav>
+          <div>
+            <h2 class="site-footer__title">Kontak</h2>
+            <ul class="site-footer__contact">
+              <li><svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg>halo@laporfasilitas.id</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-phone"></use></svg>(021) 0000-0000</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg>Jl. Pelayanan Publik No. 1, Jakarta</li>
+            </ul>
+          </div>
+        </div>
+        <div class="container site-footer__bottom">
+          <p>&copy; <span data-slot="year"></span> LaporFasilitas. Seluruh hak dilindungi.</p>
+          <p>Prototipe demonstrasi. Data dan kontak bersifat contoh.</p>
+        </div>
+      </footer>
+    </template>
+
+    <!-- ===== Masuk ===== -->
+    <template id="tpl-login">
+      <div class="auth">
+        <aside class="auth__aside" aria-hidden="true">
+          <img src="https://images.unsplash.com/photo-1680244116826-467f252cf503?auto=format&fit=crop&w=1400&q=70" alt="" data-fallback="hide" />
+          <div class="auth__aside-content">
+            <span class="brand brand--light"><span class="brand__mark"><svg class="icon"><use href="#i-logo"></use></svg></span><span class="brand__name">Lapor<span>Fasilitas</span></span></span>
+            <blockquote>"Satu laporan kecil dari warga bisa menjadi awal perbaikan besar untuk kota."</blockquote>
+            <ul class="auth__points">
+              <li><svg class="icon"><use href="#i-check-circle"></use></svg>Pantau seluruh laporan Anda dalam satu dashboard</li>
+              <li><svg class="icon"><use href="#i-check-circle"></use></svg>Riwayat status yang jelas dan transparan</li>
+            </ul>
+          </div>
+        </aside>
+        <div class="auth__main">
+          <a class="back-link" href="#/"><svg class="icon" aria-hidden="true"><use href="#i-arrow-left"></use></svg>Kembali ke Beranda</a>
+          <div class="auth__card">
+            <h1 class="auth__title" tabindex="-1">Masuk ke akun Anda</h1>
+            <p class="auth__sub">Masuk untuk membuat laporan dan memantau statusnya.</p>
+            <div class="demo-box">
+              <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+              <div>
+                <p><strong>Mode demo.</strong> Autentikasi disimulasikan di browser. Gunakan <code>warga@laporfasilitas.id</code> / <code>demo123</code>.</p>
+                <button class="link-btn" type="button" data-action="fill-demo">Gunakan akun demo</button>
+              </div>
+            </div>
+            <div class="form-alert" role="alert" data-slot="form-alert" hidden></div>
+            <form id="login-form" class="form-stack" novalidate>
+              <div class="field" data-field="email">
+                <label class="field__label" for="lg-email">Email</label>
+                <div class="input-wrap">
+                  <svg class="icon input-wrap__icon" aria-hidden="true"><use href="#i-mail"></use></svg>
+                  <input class="input input--icon" id="lg-email" name="email" type="email" autocomplete="email" placeholder="nama@email.com" aria-describedby="lg-email-error" />
+                </div>
+                <p class="field__error" id="lg-email-error" hidden></p>
+              </div>
+              <div class="field" data-field="password">
+                <label class="field__label" for="lg-password">Kata Sandi</label>
+                <div class="input-wrap">
+                  <input class="input input--trail" id="lg-password" name="password" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter" aria-describedby="lg-password-error" />
+                  <button class="input-wrap__trail" type="button" data-action="toggle-password" aria-label="Tampilkan kata sandi" aria-pressed="false">
+                    <svg class="icon" aria-hidden="true"><use href="#i-eye"></use></svg>
+                  </button>
+                </div>
+                <p class="field__error" id="lg-password-error" hidden></p>
+              </div>
+              <div class="form-row-between">
+                <label class="checkbox"><input type="checkbox" name="remember" /><span>Ingat saya</span></label>
+                <button class="link-btn" type="button" data-action="forgot">Lupa kata sandi?</button>
+              </div>
+              <button class="btn btn--primary btn--lg btn--block" type="submit"><span class="btn__label">Masuk</span></button>
+            </form>
+            <p class="auth__switch">Belum punya akun? <a href="#/daftar">Daftar sekarang</a></p>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ===== Daftar ===== -->
+    <template id="tpl-register">
+      <div class="auth">
+        <aside class="auth__aside" aria-hidden="true">
+          <img src="https://images.unsplash.com/photo-1566276423184-a8c13d2a88a1?auto=format&fit=crop&w=1400&q=70" alt="" data-fallback="hide" />
+          <div class="auth__aside-content">
+            <span class="brand brand--light"><span class="brand__mark"><svg class="icon"><use href="#i-logo"></use></svg></span><span class="brand__name">Lapor<span>Fasilitas</span></span></span>
+            <blockquote>"Bergabunglah dengan ribuan warga yang peduli pada fasilitas publik di kotanya."</blockquote>
+            <ul class="auth__points">
+              <li><svg class="icon"><use href="#i-check-circle"></use></svg>Gratis dan mudah digunakan</li>
+              <li><svg class="icon"><use href="#i-check-circle"></use></svg>Laporan Anda membantu prioritas perbaikan</li>
+            </ul>
+          </div>
+        </aside>
+        <div class="auth__main">
+          <a class="back-link" href="#/"><svg class="icon" aria-hidden="true"><use href="#i-arrow-left"></use></svg>Kembali ke Beranda</a>
+          <div class="auth__card">
+            <h1 class="auth__title" tabindex="-1">Buat akun baru</h1>
+            <p class="auth__sub">Daftar gratis untuk mulai melaporkan kerusakan fasilitas publik.</p>
+            <div class="demo-box">
+              <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+              <p><strong>Mode demo.</strong> Pendaftaran disimulasikan dan data hanya tersimpan selama tab browser ini terbuka.</p>
+            </div>
+            <div class="form-alert" role="alert" data-slot="form-alert" hidden></div>
+            <form id="register-form" class="form-stack" novalidate>
+              <div class="field" data-field="fullName">
+                <label class="field__label" for="rg-name">Nama Lengkap <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="rg-name" name="fullName" type="text" autocomplete="name" placeholder="Nama sesuai identitas" aria-describedby="rg-name-error" />
+                <p class="field__error" id="rg-name-error" hidden></p>
+              </div>
+              <div class="form-grid-2">
+                <div class="field" data-field="email">
+                  <label class="field__label" for="rg-email">Email <span class="req" aria-hidden="true">*</span></label>
+                  <input class="input" id="rg-email" name="email" type="email" autocomplete="email" placeholder="nama@email.com" aria-describedby="rg-email-error" />
+                  <p class="field__error" id="rg-email-error" hidden></p>
+                </div>
+                <div class="field" data-field="phone">
+                  <label class="field__label" for="rg-phone">No. HP <span class="field__optional">(opsional)</span></label>
+                  <input class="input" id="rg-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0812xxxxxxxx" aria-describedby="rg-phone-error" />
+                  <p class="field__error" id="rg-phone-error" hidden></p>
+                </div>
+              </div>
+              <div class="field" data-field="password">
+                <label class="field__label" for="rg-password">Kata Sandi <span class="req" aria-hidden="true">*</span></label>
+                <div class="input-wrap">
+                  <input class="input input--trail" id="rg-password" name="password" type="password" autocomplete="new-password" placeholder="Minimal 8 karakter" aria-describedby="rg-password-hint rg-password-error" />
+                  <button class="input-wrap__trail" type="button" data-action="toggle-password" aria-label="Tampilkan kata sandi" aria-pressed="false">
+                    <svg class="icon" aria-hidden="true"><use href="#i-eye"></use></svg>
+                  </button>
+                </div>
+                <div class="strength" aria-hidden="true"><span></span><span></span><span></span></div>
+                <p class="field__hint" id="rg-password-hint" data-slot="strength-text">Gunakan kombinasi huruf dan angka.</p>
+                <p class="field__error" id="rg-password-error" hidden></p>
+              </div>
+              <div class="field" data-field="confirm">
+                <label class="field__label" for="rg-confirm">Konfirmasi Kata Sandi <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="rg-confirm" name="confirm" type="password" autocomplete="new-password" placeholder="Ulangi kata sandi" aria-describedby="rg-confirm-error" />
+                <p class="field__error" id="rg-confirm-error" hidden></p>
+              </div>
+              <div class="field" data-field="agree">
+                <label class="checkbox">
+                  <input type="checkbox" name="agree" aria-describedby="rg-agree-error" />
+                  <span>Saya menyetujui syarat penggunaan dan memahami bahwa laporan yang saya kirim akan dapat dilihat publik.</span>
+                </label>
+                <p class="field__error" id="rg-agree-error" hidden></p>
+              </div>
+              <button class="btn btn--primary btn--lg btn--block" type="submit"><span class="btn__label">Daftar Sekarang</span></button>
+            </form>
+            <p class="auth__switch">Sudah punya akun? <a href="#/masuk">Masuk di sini</a></p>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ===== Halaman 2: Dashboard ===== -->
+    <template id="tpl-dashboard">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <p class="page-head__eyebrow" data-slot="today"></p>
+            <h1 class="page-head__title" tabindex="-1">Selamat datang kembali, <span data-slot="first-name"></span></h1>
+            <p class="page-head__sub">Pantau kondisi fasilitas publik dan ikuti perkembangan setiap laporan.</p>
+          </div>
+          <a class="btn btn--primary" href="#/buat-laporan"><svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>Buat Laporan</a>
+        </div>
+
+        <section class="stat-grid" aria-label="Ringkasan laporan" data-slot="stats"></section>
+
+        <section class="panel" aria-labelledby="dash-list-title">
+          <div class="panel__head">
+            <div>
+              <h2 id="dash-list-title" class="panel__title">Laporan Fasilitas Publik</h2>
+              <p class="panel__sub">Laporan dari seluruh warga. Laporan dan foto bersifat publik.</p>
+            </div>
+            <span class="public-pill"><svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg>Dapat dilihat publik</span>
+          </div>
+          <div class="toolbar" role="search" aria-label="Cari dan filter laporan">
+            <div class="search">
+              <label class="sr-only" for="dash-search">Cari laporan</label>
+              <svg class="icon search__icon" aria-hidden="true"><use href="#i-search"></use></svg>
+              <input class="input search__input" id="dash-search" type="search" placeholder="Cari judul, lokasi, atau kategori…" data-filter="search" autocomplete="off" />
+              <button class="search__clear" type="button" aria-label="Hapus pencarian" data-action="clear-search" hidden><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+            </div>
+            <div class="select-wrap">
+              <label class="sr-only" for="dash-category">Filter kategori</label>
+              <select class="input select" id="dash-category" data-filter="category"></select>
+              <svg class="icon select-wrap__icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg>
+            </div>
+          </div>
+          <div class="chip-group" role="group" aria-label="Filter status" data-slot="status-chips"></div>
+          <p class="result-count" aria-live="polite" data-slot="result-count"></p>
+          <div class="report-grid" data-slot="list"></div>
+        </section>
+      </div>
+    </template>
+
+    <!-- ===== Halaman 3: Buat Laporan ===== -->
+    <template id="tpl-create">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <p class="page-head__eyebrow">Laporan Baru</p>
+            <h1 class="page-head__title" tabindex="-1">Buat Pelaporan</h1>
+            <p class="page-head__sub">Jelaskan kerusakan yang Anda temukan. Kolom bertanda <span class="req">*</span> wajib diisi.</p>
+          </div>
+        </div>
+
+        <div class="create-layout">
+          <div>
+            <div class="notice notice--info">
+              <svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg>
+              <div>
+                <p class="notice__title">Laporan Anda bersifat publik</p>
+                <p>Judul, deskripsi, lokasi, dan foto yang Anda kirim akan ditampilkan untuk publik. Jangan menyertakan data pribadi, wajah orang, atau plat nomor kendaraan yang dapat dikenali.</p>
+              </div>
+            </div>
+
+            <div class="form-alert" role="alert" data-slot="form-alert" hidden></div>
+
+            <form id="report-form" class="panel form-panel" novalidate>
+              <div class="field" data-field="title">
+                <label class="field__label" for="rf-title">Judul Laporan <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="rf-title" name="title" type="text" maxlength="100" placeholder="Contoh: Jalan berlubang di depan SDN 03" aria-describedby="rf-title-hint rf-title-error" />
+                <div class="field__foot">
+                  <p class="field__hint" id="rf-title-hint">Tulis singkat dan spesifik (10–100 karakter).</p>
+                  <span class="counter" data-counter="rf-title" aria-hidden="true">0/100</span>
+                </div>
+                <p class="field__error" id="rf-title-error" hidden></p>
+              </div>
+
+              <fieldset class="field" data-field="category">
+                <legend class="field__label">Kategori Fasilitas <span class="req" aria-hidden="true">*</span></legend>
+                <div class="category-grid" data-slot="category-options"></div>
+                <p class="field__error" id="rf-category-error" hidden></p>
+              </fieldset>
+
+              <div class="field" data-field="description">
+                <label class="field__label" for="rf-desc">Deskripsi Kerusakan <span class="req" aria-hidden="true">*</span></label>
+                <textarea class="input textarea" id="rf-desc" name="description" rows="5" maxlength="1000" placeholder="Jelaskan kondisi kerusakan, ukuran perkiraan, sejak kapan terjadi, dan dampaknya bagi warga." aria-describedby="rf-desc-hint rf-desc-error"></textarea>
+                <div class="field__foot">
+                  <p class="field__hint" id="rf-desc-hint">Minimal 30 karakter agar petugas memahami kondisinya.</p>
+                  <span class="counter" data-counter="rf-desc" aria-hidden="true">0/1000</span>
+                </div>
+                <p class="field__error" id="rf-desc-error" hidden></p>
+              </div>
+
+              <div class="field" data-field="location">
+                <div class="field__label-row">
+                  <label class="field__label" for="rf-location">Lokasi / Alamat <span class="req" aria-hidden="true">*</span></label>
+                  <button class="link-btn" type="button" data-action="use-geolocation"><svg class="icon" aria-hidden="true"><use href="#i-crosshair"></use></svg>Gunakan lokasi saat ini</button>
+                </div>
+                <div class="input-wrap">
+                  <svg class="icon input-wrap__icon" aria-hidden="true"><use href="#i-pin"></use></svg>
+                  <input class="input input--icon" id="rf-location" name="location" type="text" autocomplete="street-address" placeholder="Nama jalan, nomor, kelurahan, kecamatan, kota" aria-describedby="rf-location-hint rf-location-error" />
+                </div>
+                <p class="field__hint" id="rf-location-hint">Semakin lengkap alamat, semakin cepat petugas menemukan lokasinya.</p>
+                <p class="field__error" id="rf-location-error" hidden></p>
+              </div>
+
+              <div class="field" data-field="landmark">
+                <label class="field__label" for="rf-landmark">Patokan Lokasi <span class="field__optional">(opsional)</span></label>
+                <input class="input" id="rf-landmark" name="landmark" type="text" maxlength="120" placeholder="Contoh: Seberang minimarket, dekat halte" />
+              </div>
+
+              <div class="field" data-field="photo">
+                <span class="field__label" id="rf-photo-label">Foto Kerusakan <span class="req" aria-hidden="true">*</span></span>
+                <label class="dropzone" for="rf-photo" data-slot="dropzone">
+                  <input class="sr-only" id="rf-photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" aria-labelledby="rf-photo-label" aria-describedby="rf-photo-hint rf-photo-error" />
+                  <span class="dropzone__icon"><svg class="icon" aria-hidden="true"><use href="#i-camera"></use></svg></span>
+                  <span class="dropzone__title"><strong>Klik untuk memilih foto</strong> atau seret ke sini</span>
+                  <span class="dropzone__hint" id="rf-photo-hint">Format JPG, PNG, atau WEBP. Maksimal 5 MB.</span>
+                </label>
+                <div class="photo-preview" data-slot="preview" hidden>
+                  <img alt="Pratinjau foto yang dipilih" data-slot="preview-img" />
+                  <div class="photo-preview__info">
+                    <span class="photo-preview__badge"><svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg>Akan tampil publik</span>
+                    <p class="photo-preview__name" data-slot="preview-name"></p>
+                    <p class="photo-preview__size" data-slot="preview-size"></p>
+                    <div class="photo-preview__actions">
+                      <button class="btn btn--secondary btn--sm" type="button" data-action="replace-photo"><svg class="icon" aria-hidden="true"><use href="#i-refresh"></use></svg>Ganti</button>
+                      <button class="btn btn--ghost-danger btn--sm" type="button" data-action="remove-photo"><svg class="icon" aria-hidden="true"><use href="#i-trash"></use></svg>Hapus</button>
+                    </div>
+                  </div>
+                </div>
+                <p class="field__error" id="rf-photo-error" hidden></p>
+              </div>
+
+              <div class="field" data-field="consent">
+                <label class="checkbox checkbox--boxed">
+                  <input type="checkbox" name="consent" aria-describedby="rf-consent-error" />
+                  <span>Saya memahami bahwa laporan dan foto ini <strong>akan dapat dilihat publik</strong>, dan informasi yang saya berikan benar.</span>
+                </label>
+                <p class="field__error" id="rf-consent-error" hidden></p>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn btn--secondary" type="reset">Kosongkan Formulir</button>
+                <button class="btn btn--primary btn--lg" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-send"></use></svg><span class="btn__label">Kirim Laporan</span></button>
+              </div>
+            </form>
+
+            <section class="panel success-panel" data-slot="success" hidden tabindex="-1" aria-labelledby="success-title">
+              <span class="success-panel__icon"><svg class="icon" aria-hidden="true"><use href="#i-check-circle"></use></svg></span>
+              <h2 id="success-title" class="success-panel__title">Laporan berhasil dikirim!</h2>
+              <p class="success-panel__text">Terima kasih atas kepedulian Anda. Laporan dengan nomor <strong data-slot="success-id"></strong> telah tercatat dengan status <span class="badge badge--baru"><svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>Baru</span> dan kini dapat dilihat publik.</p>
+              <div class="success-panel__actions">
+                <button class="btn btn--primary" type="button" data-action="view-new-report"><svg class="icon" aria-hidden="true"><use href="#i-eye"></use></svg>Lihat Detail</button>
+                <a class="btn btn--secondary" href="#/status">Lihat Status Laporan</a>
+                <button class="btn btn--ghost" type="button" data-action="new-report"><svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>Buat Laporan Lain</button>
+              </div>
+            </section>
+          </div>
+
+          <aside class="create-aside" aria-label="Tips pelaporan">
+            <div class="panel tips">
+              <h2 class="tips__title"><svg class="icon" aria-hidden="true"><use href="#i-camera"></use></svg>Tips foto yang baik</h2>
+              <ul class="tips__list">
+                <li><svg class="icon" aria-hidden="true"><use href="#i-sun"></use></svg>Ambil foto di tempat yang cukup terang.</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-maximize"></use></svg>Tampilkan ukuran kerusakan dengan jelas.</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg>Sertakan patokan di sekitar lokasi.</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-eye-off"></use></svg>Hindari wajah orang dan plat nomor.</li>
+              </ul>
+            </div>
+            <div class="panel tips">
+              <h2 class="tips__title"><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>Setelah laporan dikirim</h2>
+              <ol class="mini-timeline">
+                <li><span class="dot dot--baru"></span><div><strong>Baru</strong><p>Laporan diterima sistem.</p></div></li>
+                <li><span class="dot dot--proses"></span><div><strong>Dalam Proses</strong><p>Diverifikasi &amp; ditangani dinas.</p></div></li>
+                <li><span class="dot dot--selesai"></span><div><strong>Selesai</strong><p>Perbaikan telah rampung.</p></div></li>
+              </ol>
+              <a class="link-arrow" href="#/panduan">Baca panduan lengkap<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </template>
+
+    <!-- ===== Halaman 4: Status Laporan ===== -->
+    <template id="tpl-status">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <p class="page-head__eyebrow">Laporan Saya</p>
+            <h1 class="page-head__title" tabindex="-1">Status Laporan</h1>
+            <p class="page-head__sub">Pantau perkembangan setiap laporan yang telah Anda kirim.</p>
+          </div>
+          <a class="btn btn--primary" href="#/buat-laporan"><svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>Buat Laporan</a>
+        </div>
+
+        <div class="status-summary" role="group" aria-label="Filter berdasarkan status" data-slot="summary"></div>
+
+        <section class="panel" aria-labelledby="status-table-title">
+          <div class="panel__head">
+            <div>
+              <h2 id="status-table-title" class="panel__title">Daftar Laporan Saya</h2>
+              <p class="panel__sub" aria-live="polite" data-slot="result-count"></p>
+            </div>
+          </div>
+          <div class="toolbar" role="search" aria-label="Cari dan filter laporan saya">
+            <div class="search">
+              <label class="sr-only" for="st-search">Cari laporan saya</label>
+              <svg class="icon search__icon" aria-hidden="true"><use href="#i-search"></use></svg>
+              <input class="input search__input" id="st-search" type="search" placeholder="Cari judul atau lokasi…" data-filter="search" autocomplete="off" />
+              <button class="search__clear" type="button" aria-label="Hapus pencarian" data-action="clear-search" hidden><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+            </div>
+            <div class="select-wrap">
+              <label class="sr-only" for="st-status">Filter status</label>
+              <select class="input select" id="st-status" data-filter="status"></select>
+              <svg class="icon select-wrap__icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg>
+            </div>
+            <div class="select-wrap">
+              <label class="sr-only" for="st-category">Filter kategori</label>
+              <select class="input select" id="st-category" data-filter="category"></select>
+              <svg class="icon select-wrap__icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg>
+            </div>
+          </div>
+          <div data-slot="list"></div>
+        </section>
+      </div>
+    </template>
+
+    <!-- ===== Halaman 5: Profil ===== -->
+    <template id="tpl-profile">
+      <div class="page">
+        <div class="page-head">
+          <div>
+            <p class="page-head__eyebrow">Akun</p>
+            <h1 class="page-head__title" tabindex="-1">Profil Akun</h1>
+            <p class="page-head__sub">Kelola informasi akun dan aktivitas pelaporan Anda.</p>
+          </div>
+        </div>
+        <div class="profile-layout">
+          <section class="panel profile-card" aria-label="Ringkasan profil">
+            <div class="profile-card__cover" aria-hidden="true"></div>
+            <span class="avatar avatar--xl" data-slot="avatar"></span>
+            <h2 class="profile-card__name" data-slot="name"></h2>
+            <p class="profile-card__email" data-slot="email"></p>
+            <span class="role-badge"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>Warga Terverifikasi (Demo)</span>
+            <div class="profile-card__stats" data-slot="mini-stats"></div>
+            <div class="profile-card__actions">
+              <button class="btn btn--primary btn--block" type="button" data-action="edit-profile"><svg class="icon" aria-hidden="true"><use href="#i-edit"></use></svg>Edit Profil</button>
+              <button class="btn btn--ghost-danger btn--block" type="button" data-action="logout"><svg class="icon" aria-hidden="true"><use href="#i-log-out"></use></svg>Logout</button>
+            </div>
+          </section>
+          <section class="panel" aria-labelledby="account-info-title">
+            <div class="panel__head">
+              <div>
+                <h2 id="account-info-title" class="panel__title">Informasi Akun</h2>
+                <p class="panel__sub">Data contoh untuk demonstrasi antarmuka.</p>
+              </div>
+            </div>
+            <dl class="info-list" data-slot="info"></dl>
+            <div class="notice notice--muted">
+              <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+              <p>Pada versi produksi, data akun dikelola oleh server dan kata sandi tidak pernah disimpan di browser.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </template>
+
+    <!-- ===== Halaman 6: Panduan & Tentang ===== -->
+    <template id="tpl-guide">
+      <div class="page">
+        <div class="guide-hero">
+          <div>
+            <p class="page-head__eyebrow">Panduan Pelaporan</p>
+            <h1 class="page-head__title" tabindex="-1">Cara membuat laporan yang mudah ditindaklanjuti</h1>
+            <p class="page-head__sub">LaporFasilitas adalah platform bagi warga untuk melaporkan kerusakan fasilitas publik secara terbuka. Laporan yang jelas membantu petugas bekerja lebih cepat dan tepat.</p>
+          </div>
+          <a class="btn btn--primary" href="#/buat-laporan"><svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>Buat Laporan</a>
+        </div>
+
+        <section class="guide-section" aria-labelledby="g-steps">
+          <h2 id="g-steps" class="guide-section__title">Langkah-langkah pelaporan</h2>
+          <ol class="guide-steps">
+            <li><span class="guide-steps__num">1</span><svg class="icon" aria-hidden="true"><use href="#i-log-in"></use></svg><h3>Masuk ke akun</h3><p>Masuk atau daftar akun agar laporan dapat dipantau.</p></li>
+            <li><span class="guide-steps__num">2</span><svg class="icon" aria-hidden="true"><use href="#i-file-plus"></use></svg><h3>Isi formulir</h3><p>Tulis judul, pilih kategori, dan jelaskan kerusakannya.</p></li>
+            <li><span class="guide-steps__num">3</span><svg class="icon" aria-hidden="true"><use href="#i-camera"></use></svg><h3>Unggah foto &amp; lokasi</h3><p>Lampirkan foto yang jelas dan alamat yang akurat.</p></li>
+            <li><span class="guide-steps__num">4</span><svg class="icon" aria-hidden="true"><use href="#i-clipboard"></use></svg><h3>Pantau status</h3><p>Ikuti perkembangan laporan di halaman Status Laporan.</p></li>
+          </ol>
+        </section>
+
+        <div class="guide-grid">
+          <section class="panel guide-card" aria-labelledby="g-photo">
+            <h2 id="g-photo" class="guide-card__title"><span class="guide-card__icon"><svg class="icon" aria-hidden="true"><use href="#i-camera"></use></svg></span>Panduan foto yang berguna</h2>
+            <div class="do-dont">
+              <div class="do-dont__col do-dont__col--do">
+                <h3><svg class="icon" aria-hidden="true"><use href="#i-check-circle"></use></svg>Lakukan</h3>
+                <ul>
+                  <li>Foto di siang hari atau tempat yang terang.</li>
+                  <li>Ambil dari jarak dekat dan jauh untuk menunjukkan skala.</li>
+                  <li>Sertakan patokan seperti papan nama atau bangunan.</li>
+                  <li>Pastikan foto fokus dan tidak buram.</li>
+                </ul>
+              </div>
+              <div class="do-dont__col do-dont__col--dont">
+                <h3><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>Hindari</h3>
+                <ul>
+                  <li>Menampilkan wajah orang yang dapat dikenali.</li>
+                  <li>Plat nomor kendaraan atau data pribadi.</li>
+                  <li>Foto lama atau dari lokasi berbeda.</li>
+                  <li>Foto yang diedit atau diberi filter berlebihan.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel guide-card" aria-labelledby="g-location">
+            <h2 id="g-location" class="guide-card__title"><span class="guide-card__icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg></span>Pentingnya lokasi yang akurat</h2>
+            <p>Petugas lapangan mengandalkan alamat pada laporan untuk menemukan titik kerusakan. Lokasi yang samar dapat memperlambat penanganan atau membuat laporan sulit diverifikasi.</p>
+            <div class="example example--good">
+              <span class="example__label"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>Contoh baik</span>
+              <p>Jl. Sukajadi No. 112, Kel. Sukagalih, Kec. Sukajadi, Kota Bandung (depan SDN Sukajadi 03)</p>
+            </div>
+            <div class="example example--bad">
+              <span class="example__label"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>Kurang jelas</span>
+              <p>Jalan dekat sekolah</p>
+            </div>
+          </section>
+        </div>
+
+        <section class="guide-section" aria-labelledby="g-status">
+          <h2 id="g-status" class="guide-section__title">Arti status laporan</h2>
+          <div class="status-explain" data-slot="status-explain"></div>
+        </section>
+
+        <section class="guide-section" aria-labelledby="g-faq">
+          <h2 id="g-faq" class="guide-section__title">Pertanyaan yang sering diajukan</h2>
+          <div class="faq">
+            <details><summary>Apakah laporan saya dapat dilihat orang lain?<svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary><p>Ya. Judul, deskripsi, lokasi, foto, dan status laporan bersifat publik agar prosesnya transparan. Data akun seperti email dan nomor HP tidak ditampilkan.</p></details>
+            <details><summary>Berapa lama laporan ditindaklanjuti?<svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary><p>Waktu penanganan bergantung pada jenis kerusakan dan dinas terkait. Umumnya laporan diverifikasi dalam 1–3 hari kerja.</p></details>
+            <details><summary>Bagaimana jika kerusakan yang sama sudah dilaporkan?<svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary><p>Cari terlebih dahulu di Dashboard. Jika sudah ada, Anda cukup memantau laporan tersebut agar tidak terjadi duplikasi.</p></details>
+            <details><summary>Apakah saya bisa menghapus laporan?<svg class="icon" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary><p>Pada versi prototipe ini belum tersedia. Fitur pengelolaan laporan akan hadir setelah sistem terhubung ke server.</p></details>
+          </div>
+        </section>
+
+        <section class="cta-card cta-card--compact">
+          <div>
+            <h2 class="cta-card__title">Menemukan fasilitas yang rusak?</h2>
+            <p class="cta-card__text">Laporkan sekarang dan bantu kota Anda menjadi lebih nyaman.</p>
+          </div>
+          <a class="btn btn--accent btn--lg" href="#/buat-laporan">Buat Laporan<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+        </section>
+      </div>
+    </template>
+
+    <!-- ===== Halaman tidak ditemukan ===== -->
+    <template id="tpl-404">
+      <div class="not-found">
+        <span class="not-found__code">404</span>
+        <h1 tabindex="-1">Halaman tidak ditemukan</h1>
+        <p>Alamat yang Anda tuju tidak tersedia atau telah dipindahkan.</p>
+        <a class="btn btn--primary" href="#/"><svg class="icon" aria-hidden="true"><use href="#i-home"></use></svg>Kembali ke Beranda</a>
+      </div>
+    </template>
+
+    <!-- ===== Komponen: kartu laporan ===== -->
+    <template id="tpl-report-card">
+      <article class="report-card">
+        <div class="report-card__media">
+          <img class="report-card__img" loading="lazy" alt="" data-slot="img" data-fallback />
+          <span class="report-card__badge" data-slot="badge"></span>
+        </div>
+        <div class="report-card__body">
+          <div class="report-card__top">
+            <span class="cat-chip" data-slot="category"></span>
+            <span class="report-card__id" data-slot="id"></span>
+          </div>
+          <h3 class="report-card__title" data-slot="title"></h3>
+          <ul class="meta-list">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-pin"></use></svg><span data-slot="location"></span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg><time data-slot="date"></time></li>
+          </ul>
+          <p class="report-card__desc" data-slot="desc"></p>
+          <div class="report-card__foot">
+            <span class="report-card__reporter" data-slot="reporter"></span>
+            <button class="btn btn--secondary btn--sm" type="button" data-action="view-report">Lihat Detail<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="./script.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "description": "Membantu warga melaporkan kerusakan fasilitas umum, melacak status laporan, dan melihat progres perbaikan untuk mendukung layanan publik yang lebih baik.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
